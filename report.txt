@@ -1,0 +1,10 @@
+stack created!
+The element was successfully added to the stack!
+Stack data: 100.000000 
+The element was successfully added to the stack!
+The element was successfully added to the stack!
+Stack data: 300.000000 200.000000 100.000000 
+The element has left the stack!
+The element has left the stack!
+Stack data: 100.000000 
+stack determinate!
