@@ -2,6 +2,7 @@
 #include<stdlib.h>
 
 #include"../headers/stack_implementation.h"
+#include"../headers/utilits.h"
 
 FILE * Logfile = fopen("report.txt", "w");
 
@@ -20,14 +21,15 @@ bool Stack_ctor(bad_stack * b_stk, size_t size) {
     }
 
     fprintf(Logfile, "stack created!\n");
-    return true;
+    return Verification(b_stk);
 }
+
 
 bool Stack_dtor(bad_stack * b_stk) {
 
     free(b_stk->stack_data);
     fprintf(Logfile, "stack determinate!\n");
-    return true;
+    return Verification(b_stk);
 
 }
 
@@ -37,7 +39,7 @@ bool Stack_increase(bad_stack * b_stk) {
     if (new_data != NULL) {
         b_stk->capacity *= 2;
         b_stk->stack_data = new_data;
-        return true;
+        return Verification(b_stk);
     } else {
         return false;
     }
@@ -58,7 +60,7 @@ bool Stack_push(bad_stack * b_stk, stack_elem_t elem_t) {
     }
     *(b_stk->stack_data + b_stk->size) = elem_t;
     fprintf(Logfile,"The element was successfully added to the stack!\n");
-    return true;
+    return Verification(b_stk);
 }
 
 
@@ -97,7 +99,7 @@ stack_elem_t Stack_pop(bad_stack * b_stk) {
     *(b_stk->stack_data + b_stk->size) = 0;
     b_stk->size--;
     fprintf (Logfile, "The element has left the stack!\n");
-
+    
     return elem_out;
 }
 
