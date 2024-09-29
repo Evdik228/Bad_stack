@@ -1,114 +1,135 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-#include"../headers/stack_implementation.h"
-#include"../headers/utilits.h"
+// TODO -I compilation flag
+#include "../headers/stack_implementation.h"
+#include "../headers/utilits.h"
 
 FILE * Logfile = fopen("report.txt", "w");
 
-bool Stack_ctor(bad_stack * b_stk, size_t size) {
+bool Stack_ctor(bad_stack * stack, size_t size) {
+    // TODO varificator
     
     stack_elem_t * data = (stack_elem_t *)calloc(size, sizeof(stack_elem_t));
 
-    if (data != NULL) {
-
-        b_stk->stack_data = data;
-        b_stk->capacity = size;
-
-    } else {
+    if (data == NULL) {
         fprintf (Logfile,"Error in memory allocation(Stack_ctor)!\n");
         return false;
     }
 
+    stack->stack_data = data;
+    stack->capacity = size;
+
     fprintf(Logfile, "stack created!\n");
-    return Verification(b_stk);
+    return Verification(stack);
 }
 
-
-bool Stack_dtor(bad_stack * b_stk) {
-
-    free(b_stk->stack_data);
-    fprintf(Logfile, "stack determinate!\n");
-    return Verification(b_stk);
-
-}
-
-
-bool Stack_increase(bad_stack * b_stk) {
-    stack_elem_t * new_data = (stack_elem_t *)realloc(b_stk->stack_data, 2 * b_stk->capacity);
-    if (new_data != NULL) {
-        b_stk->capacity *= 2;
-        b_stk->stack_data = new_data;
-        return Verification(b_stk);
-    } else {
+bool Stack_dtor(bad_stack * stack) {
+    if (stack == NULL) {
         return false;
     }
+
+    free(stack->stack_data);
+    stack->stack_data = NULL;
+
+    stack->size = 0;
+    stack->capacity = 0;
+
+    fprintf(Logfile, "stack determinate!\n");
+
+    return true;
 }
 
+bool Stack_increase(bad_stack * stack) {
+    // TODO verification
 
-bool Stack_push(bad_stack * b_stk, stack_elem_t elem_t) {
-    b_stk->size += 1; 
-    if (b_stk->capacity <= b_stk->size) {
+    stack_elem_t * new_data = (stack_elem_t *)realloc(stack->stack_data, 2 * stack->capacity);
 
-        if (Stack_increase(b_stk)) {
-            fprintf(Logfile,"Stack size increased to:%lu \n", b_stk->capacity);
+    if (new_data == NULL) {
+        return false;
+    }
 
+    stack->capacity *= 2;
+    stack->stack_data = new_data;
+    return Verification(stack);
+}
+
+// TODO 
+//#define PRINT_SPECIFIER "%lf"
+//
+//void Print_value(stack_elem_t value) {
+//    printf(PRINT_SPECIFIER, value);
+//}
+
+bool Stack_push(bad_stack * stack, stack_elem_t elem_t) {
+    // TODO verify
+
+    stack->size += 1;
+
+    if (stack->capacity <= stack->size) {
+
+        // TODO print log status
+        // LOG_INFO(logfile, ...) fprintf(logfile, "[INFO]: " ...)
+        if (Stack_increase(stack)) {
+            fprintf(Logfile,"Stack size increased to:%lu \n", stack->capacity);
         } else {
             fprintf(Logfile, "Error in increasing stack`s size\n");
             return false;
         }
     }
-    *(b_stk->stack_data + b_stk->size) = elem_t;
+
+    *(stack->stack_data + stack->size) = elem_t;
+
     fprintf(Logfile,"The element was successfully added to the stack!\n");
-    return Verification(b_stk);
+
+    return Verification(stack);
 }
 
-
-
-bool Stack_decrease(bad_stack * b_stk) {
-    stack_elem_t * new_data = (stack_elem_t *)realloc(b_stk->stack_data, b_stk->capacity / 2);   //TODO: maby copypast?*
-    if (new_data != NULL) {
-
-        b_stk->capacity /= 2;
-        b_stk->stack_data = new_data;
-
-        return true;
-    } else {
+bool Stack_decrease(bad_stack * stack) {
+    stack_elem_t * new_data = (stack_elem_t *)realloc(stack->stack_data, stack->capacity / 2);   //TODO: maby copypast?*
+    
+    // TODO invert if
+    if (new_data == NULL) {
         return false;
     }
+
+    stack->capacity /= 2;
+    stack->stack_data = new_data;
+    return true;
 }
 
-stack_elem_t Stack_pop(bad_stack * b_stk) {
+// TODO error code
+stack_elem_t Stack_pop(bad_stack * stack) {
 
-    if (b_stk->size == 0) {
+    if (stack->size == 0) {
         fprintf (Logfile,"The stack is empty!\n");
         return 0;
     }
     
-    if (b_stk->capacity > b_stk->size * 2 && b_stk->capacity > STACK_SIZE_DEFAULT)  {
+    if (stack->capacity > stack->size * 2 && stack->capacity > STACK_SIZE_DEFAULT)  {
 
-        if (Stack_decrease(b_stk)) {
-            fprintf(Logfile,"Stack size decreased to:%lu \n", b_stk->capacity);
+        if (Stack_decrease(stack)) {
+            fprintf(Logfile,"Stack size decreased to:%lu \n", stack->capacity);
 
         } else {
             fprintf(Logfile, "Error in decreasing stack`s size\n");
             return false;
         }
     }
-    stack_elem_t elem_out = *(b_stk->stack_data + b_stk->size);
-    *(b_stk->stack_data + b_stk->size) = 0;
-    b_stk->size--;
+    stack_elem_t elem_out = *(stack->stack_data + stack->size);
+    *(stack->stack_data + stack->size) = 0;
+    stack->size--;
     fprintf (Logfile, "The element has left the stack!\n");
     
     return elem_out;
 }
 
-void View_stack_data_double(bad_stack * b_stk) {
-     fprintf (Logfile, "Stack data: ");
-     for (int elem = b_stk->size; elem > 0; elem--) {
-        fprintf (Logfile, "%f ", *(b_stk->stack_data + elem));
-     }
-     fprintf (Logfile, "\n");
+void View_stack_data_double(bad_stack * stack) {
+    fprintf (Logfile, "Stack data: ");
+    for (int elem = stack->size; elem > 0; elem--) {
+       fprintf (Logfile, "%f ", *(stack->stack_data + elem));
+    }
+    fprintf (Logfile, "\n");
 }
 
 

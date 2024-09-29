@@ -9,6 +9,13 @@ FLAGS = -D _DEBUG -ggdb3 -std=c++17 -O0 -Wall -Wextra -Weffc++ -Waggressive-loop
 -fstrict-overflow -flto-odr-type-merging -fno-omit-frame-pointer -Wlarger-than=8192 -Wstack-usage=8192 -pie -fPIE -Werror=vla    \
 -fsanitize=address,alignment,bool,bounds,enum,float-cast-overflow,float-divide-by-zero,integer-divide-by-zero,leak,nonnull-attribute,null,return,returns-nonnull-attribute,shift,signed-integer-overflow,undefined,unreachable,vla-bound,vptr         
 
+# TODO BUILD_FOLDER = objects
+
+# TODO OBJECT_FILES = main.o utilits.o stack_implementation.o
+# $(addprefix, BUILD_FOLDER, OBJECT_FILES)
+
+# TODO https://makefiletutorial.com/ - static pattern rules
+
 Compile: ./objects/main.o ./objects/utilits.o ./objects/stack_implementation.o
 	g++ ./objects/main.o ./objects/utilits.o ./objects/stack_implementation.o $(FLAGS) -o app 
 ./objects/main.o : src/main.cpp 

@@ -1,19 +1,30 @@
-#ifndef  STACK_IMP
-#define  STACK_IMP
+#ifndef  STACK_IMP_H_
+#define  STACK_IMP_H_
 
 #include<stdio.h>
 
-
-typedef double stack_elem_t;
+typedef int stack_elem_t;
+#define STACK_TYPE() "%d"
 
 const size_t STACK_SIZE_DEFAULT = 20;
+const 
+
+enum error_types {
+    
+    ZERO_POINTER = 0,
+    //TODO
+};
+
+
 
 struct bad_stack {
-
+    double Chicksa1;
     stack_elem_t * stack_data;
     size_t size;
     size_t capacity;
-
+    size_t error_code;
+    FILE *logFile;
+    double Chicksa2;
 };
 
 bool Stack_ctor( bad_stack * b_stk, size_t size);

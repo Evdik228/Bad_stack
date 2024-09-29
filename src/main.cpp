@@ -3,6 +3,7 @@
 
 #include"../headers/stack_implementation.h"
 
+//#define is_error(function) ()
 
 int main(int argc, char const *argv[]) {
 
@@ -15,7 +16,7 @@ int main(int argc, char const *argv[]) {
     } 
     if (!Stack_push(&b_stk, 100)) {
         return 0;
-    } 
+    }
 
     View_stack_data_double(&b_stk);
 
