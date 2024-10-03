@@ -2,43 +2,32 @@
 #include<stdio.h>
 
 #include"../headers/stack_implementation.h"
+#include"../headers/utilits.h"
 
 //#define is_error(function) ()
 
 int main(int argc, char const *argv[]) {
 
     FILE * Logfile = fopen("report.txt", "w");
-
-    bad_stack b_stk = {}; 
-
-    if (!Stack_ctor(&b_stk, STACK_SIZE_DEFAULT)) {     //TODO: Define 
-        return 0;
-    } 
-    if (!Stack_push(&b_stk, 100)) {
-        return 0;
-    }
-
-    View_stack_data_double(&b_stk);
-
-    if (!Stack_push(&b_stk, 200)) {
-        return 0;
-    }
     
-    if (!Stack_push(&b_stk, 300)) {
-        return 0;
-    }
-
-    View_stack_data_double(&b_stk);
+    bad_stack stack = {};      
     
-    stack_elem_t elem = Stack_pop(&b_stk);
-    elem = Stack_pop(&b_stk);
+    Stack_ctor(&stack, "stack");
 
-    View_stack_data_double(&b_stk);
+    //stack.logFile = Logfile;
 
-    if (!Stack_dtor(&b_stk)) {
-        return 0;
+    for(int i = 10; i <= 170; i+=10) {
+        Stack_push(&stack, i);
     }
+   
     
-    fclose(Logfile);
+
+    Stack_pop(&stack);
+    
+
+    Dumper(&stack, "stack", "main");
+ 
+    Stack_dtor(&stack);    //error
+
     return 0;
 }

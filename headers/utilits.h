@@ -1,9 +1,14 @@
 // TODO UTILITIES_H
-#ifndef  UTILITS
-#define  UTILITS
+#ifndef  UTILITIES_H
+#define  UTILITIES_H
 
-#include "headers/stack_implementation.h"
+// #pragma once
 
-bool Verification (bad_stack * b_stk);
+#include "../headers/stack_implementation.h"
+
+error_types Verification (bad_stack * stack);
+void Dumper(bad_stack * stack, const char * stack_name, const char * function);
+size_t Hash_count(bad_stack * stack);
+void Print_error(bad_stack * stack);
 
 #endif
