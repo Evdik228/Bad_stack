@@ -57,8 +57,8 @@ error_types Stack_ctor(bad_stack * stack,  const char * stack_name) {
 }
 
 error_types Stack_dtor(bad_stack * stack) {
+    
     if (stack == NULL) {
-        stack->error_code = ZERO_POINTER_STACK;
         return ZERO_POINTER_STRUCT;
     }
     
@@ -78,7 +78,7 @@ error_types Stack_dtor(bad_stack * stack) {
 
     stack->stack_data -= sizeof(CHICKSA_OK);
 
-    char * new_data = (char *)realloc(stack->stack_data, 2 * stack->capacity * sizeof(stack_elem_t) + sizeof(CHICKSA_OK));
+    char * new_data = (char *)realloc(stack->stack_data, 2 * stack->capacity * sizeof(stack_elem_t) + 2 * sizeof(CHICKSA_OK));
 
     if (new_data == NULL) {
         stack->error_code = REALLOC_ERR;
