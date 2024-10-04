@@ -57,7 +57,7 @@ error_types Stack_ctor(bad_stack * stack,  const char * stack_name) {
 }
 
 error_types Stack_dtor(bad_stack * stack) {
-    
+
     if (stack == NULL) {
         return ZERO_POINTER_STRUCT;
     }
@@ -97,8 +97,12 @@ error_types Stack_dtor(bad_stack * stack) {
 }
 
 error_types Stack_push(bad_stack * stack, stack_elem_t elem_t) {
-    
+
     IS_ERROR(stack, stack->stack_name, "Stack_push");
+
+    if (stack->stack_data == NULL) {
+        return ZERO_POINTER_STACK;
+    }
 
     stack->size += 1;
 
@@ -148,7 +152,7 @@ error_types Stack_pop(bad_stack * stack) {
 
     IS_ERROR(stack, stack->stack_name, "Stack_decrease");
     
-    if (stack->size == 0) {
+    if (stack->size <= 0) {
         fprintf (stack->logFile,"The stack is empty!\n");
         stack->error_code == ERROR;
         return ERROR;

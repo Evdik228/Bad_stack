@@ -6,7 +6,7 @@
 
 // TODO: Verificataor can report only about one error
 
-error_types Verification (bad_stack * stack) { \
+error_types Verification (bad_stack * stack) { 
 
     if (stack == NULL ) {
         printf("error: The pointer to the stack structure is zero!\n");
@@ -15,7 +15,7 @@ error_types Verification (bad_stack * stack) { \
     }
 
     if (stack->capacity == 0 && stack->error_code == 0 && stack->stack_data == NULL) {
-        return OKEY;
+        return OKEY; 
     }
 
     if (stack->logFile == NULL) {
