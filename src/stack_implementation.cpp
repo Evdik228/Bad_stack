@@ -5,11 +5,25 @@
 #include "../headers/stack_implementation.h"
 #include "../headers/utilits.h"
 
-#define IS_ERROR(stack, name, function) if (Verification(stack) != OKEY) {Dumper(stack, name, "Stack_ctor");  return stack->error_code;}  
+#define DEBUG_MODE
+
+#ifdef DEBUG_MODE
+
+#define IS_ERROR(stack, name, function)     \
+    if (Verification(stack) != OKEY) {      \
+        Dumper(stack, name, "Stack_ctor");  \
+        return stack->error_code;           \
+    }  
+
+#else
+
+#define IS_ERROR(stack, name, function) ;
+
+#endif
     
 error_types Stack_ctor(bad_stack * stack,  const char * stack_name) {
 
-    IS_ERROR(stack, stack->stack_name, "Stack_ctor");
+    
 
     stack->stack_name = stack_name;    
     stack->capacity = STACK_SIZE_DEFAULT;

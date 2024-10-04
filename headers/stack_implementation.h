@@ -10,22 +10,23 @@ const size_t STACK_SIZE_DEFAULT = 16;
 const long long CHICKSA_OK = 0XBADDED; // NOTE: nice!
 
 enum error_types {
-    OKEY = 0,
-    ERROR = 1,
-    ZERO_POINTER_STRUCT = 2,
-    ZERO_POINTER_STACK = 3,
-    STACK_OVERFLOW = 4,
-    HASH_ERR = 5,
-    BIG_CANARY_DIE = 6,
-    SMALL_CANARY_DIE = 7,
-    SIZE_ERR = 8,
-    CAPACITY_ERR = 9,
-    FILE_ERR = 10,
-    REALLOC_ERR = 11,
+    OKEY                = 0,
+    ERROR               = 3,
+    ZERO_POINTER_STRUCT = 2,                    //<< 1,  log or  --> |
+    ZERO_POINTER_STACK  = 3,
+    STACK_OVERFLOW      = 4,
+    HASH_ERR            = 5,
+    BIG_CANARY_DIE      = 6,
+    SMALL_CANARY_DIE    = 7,
+    SIZE_ERR            = 8,
+    CAPACITY_ERR        = 9,
+    FILE_ERR            = 10,
+    REALLOC_ERR         = 11,
 };
 
 struct bad_stack { // TODO: rename
     long long mother_chicksa1; // TODO: rename
+
     char* stack_data;
     size_t size;
     size_t capacity;
@@ -34,6 +35,7 @@ struct bad_stack { // TODO: rename
     const char *stack_name;
     stack_elem_t last_pop_element;
     int hash_sum;
+
     long long mother_chicksa2;
 
 };

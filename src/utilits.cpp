@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include <assert.h>
 
 #include "../headers/utilits.h"
 #include "../headers/stack_implementation.h"
 
 // TODO: Verificataor can report only about one error
+
 error_types Verification (bad_stack * stack) { \
 
     if (stack == NULL ) {
@@ -63,6 +65,10 @@ error_types Verification (bad_stack * stack) { \
 }
 
 void Dumper(bad_stack * stack, const char * stack_name, const char * function) { // TODO: rename
+    
+    if (stack == NULL) {
+        printf("Zero pointer stack!");
+    }
 
     fprintf(stack->logFile, "Stack, named $%s$ [%p] from function: %s()\n", stack->stack_name, stack, function);
     fprintf(stack->logFile, "Stack %s {\n", stack_name);
@@ -80,24 +86,25 @@ void Dumper(bad_stack * stack, const char * stack_name, const char * function) {
 
     fprintf(stack->logFile, "   5. ");
     Print_error(stack);
+    if (stack->stack_data != NULL) {
+        fprintf(stack->logFile, "   6. Data[%p] {\n", stack->stack_data);
 
-    fprintf(stack->logFile, "   6. Data[%p] {\n", stack->stack_data);
+        fprintf(stack->logFile, "       canary one: %X", *((long long *)(stack->stack_data - sizeof(CHICKSA_OK))));  
+            *((long long *)(stack->stack_data - sizeof(CHICKSA_OK))) == CHICKSA_OK ? fprintf(stack->logFile, "[OK]\n") : fprintf(stack->logFile, "[ERR]\n");
 
-    fprintf(stack->logFile, "       canary one: %X", *((long long *)(stack->stack_data - sizeof(CHICKSA_OK))));  
-          *((long long *)(stack->stack_data - sizeof(CHICKSA_OK))) == CHICKSA_OK ? fprintf(stack->logFile, "[OK]\n") : fprintf(stack->logFile, "[ERR]\n");
+        for (size_t i = stack->size; i > 0; i --) {
+            fprintf(stack->logFile, "       -[%i] = ", stack->size - i);
+            fprintf(stack->logFile, PRINTF_SPECIFIER, *((stack_elem_t *)(stack->stack_data + i * sizeof(stack_elem_t))));
+            fprintf(stack->logFile, "\n");
+        }
+        fprintf(stack->logFile, "       canary two: %X", *((long long *)(stack->stack_data + stack->capacity * sizeof(stack_elem_t))));
+            *((long long *)(stack->stack_data + stack->capacity * sizeof(stack_elem_t))) == CHICKSA_OK ? fprintf(stack->logFile, "[OK]\n") : fprintf(stack->logFile, "[ERR]\n");
+        fprintf(stack->logFile,"    }\n");
 
-    for (size_t i = stack->size; i > 0; i --) {
-        fprintf(stack->logFile, "       -[%i] = ", stack->size - i);
-        fprintf(stack->logFile, PRINTF_SPECIFIER, *((stack_elem_t *)(stack->stack_data + i * sizeof(stack_elem_t))));
-        fprintf(stack->logFile, "\n");
+        fprintf(stack->logFile, "Big canary two: %X", stack->mother_chicksa1);
+                stack->mother_chicksa2 == CHICKSA_OK ? fprintf(stack->logFile, "[OK]\n") : fprintf(stack->logFile, "[ERR]\n");
+        fprintf(stack->logFile,"}\n");
     }
-    fprintf(stack->logFile, "       canary two: %X", *((long long *)(stack->stack_data + stack->capacity * sizeof(stack_elem_t))));
-          *((long long *)(stack->stack_data + stack->capacity * sizeof(stack_elem_t))) == CHICKSA_OK ? fprintf(stack->logFile, "[OK]\n") : fprintf(stack->logFile, "[ERR]\n");
-    fprintf(stack->logFile,"    }\n");
-
-    fprintf(stack->logFile, "Big canary two: %X", stack->mother_chicksa1);
-            stack->mother_chicksa2 == CHICKSA_OK ? fprintf(stack->logFile, "[OK]\n") : fprintf(stack->logFile, "[ERR]\n");
-    fprintf(stack->logFile,"}\n");
 }
 
 size_t Hash_count(bad_stack * stack) {
@@ -112,6 +119,9 @@ size_t Hash_count(bad_stack * stack) {
 }
 
 void Print_error(bad_stack * stack) {
+    
+    assert(stack != NULL);
+
     switch (stack->error_code) {
 
     case OKEY:
