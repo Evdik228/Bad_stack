@@ -107,7 +107,7 @@ void Dumper(bad_stack * stack, const char * stack_name, const char * function) {
     }
 }
 
-size_t Hash_count(bad_stack * stack) {
+size_t Hash_count(bad_stack * stack) {  //TODO: normal dgb2 (not this)
 
     size_t HS1 = 0xDED;
     size_t HS2 = 0xAD;

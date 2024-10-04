@@ -7,7 +7,7 @@ typedef int stack_elem_t;
 #define PRINTF_SPECIFIER "%d"
 
 const size_t STACK_SIZE_DEFAULT = 16;
-const long long CHICKSA_OK = 0XBADDED; // NOTE: nice!
+const long long CHICKSA_OK = 0XBADDED600DDED; // NOTE: nice!
 
 enum error_types {
     OKEY                = 0,
@@ -33,7 +33,7 @@ struct bad_stack { // TODO: rename
     error_types error_code;
     FILE *logFile;
     const char *stack_name;
-    stack_elem_t last_pop_element;
+    stack_elem_t last_pop_element;    //TODO: pop result
     int hash_sum;
 
     long long mother_chicksa2;

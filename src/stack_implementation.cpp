@@ -23,7 +23,7 @@
     
 error_types Stack_ctor(bad_stack * stack,  const char * stack_name) {
 
-    
+    IS_ERROR(stack, stack->stack_name, "Stack_ctor");
 
     stack->stack_name = stack_name;    
     stack->capacity = STACK_SIZE_DEFAULT;
@@ -127,9 +127,8 @@ error_types Stack_decrease(bad_stack * stack) {
     IS_ERROR(stack, stack->stack_name, "Stack_decrease");
 
     stack->capacity /= 2;
-    *((long long *)(stack->stack_data + stack->capacity * sizeof(stack_elem_t))) = CHICKSA_OK;
 
-    char * new_data = (char *)realloc(stack->stack_data - sizeof(CHICKSA_OK), stack->capacity / 2 + sizeof(CHICKSA_OK)); 
+    char * new_data = (char *)realloc(stack->stack_data - sizeof(CHICKSA_OK), stack->capacity * sizeof(stack_elem_t) + 2 * sizeof(CHICKSA_OK)); 
     
     if (new_data == NULL) {
         stack->error_code = REALLOC_ERR;
@@ -137,15 +136,22 @@ error_types Stack_decrease(bad_stack * stack) {
     }
 
     stack->stack_data = new_data;
+    
+    stack->stack_data += sizeof(CHICKSA_OK);
+    *((long long *)(stack->stack_data + stack->capacity * sizeof(stack_elem_t))) = CHICKSA_OK;
+    
+
     return OKEY;
 }
 
 error_types Stack_pop(bad_stack * stack) {
-    
+
     IS_ERROR(stack, stack->stack_name, "Stack_decrease");
     
     if (stack->size == 0) {
         fprintf (stack->logFile,"The stack is empty!\n");
+        stack->error_code == ERROR;
+        return ERROR;
     }
    
     if (stack->capacity > stack->size * 4 && stack->capacity > STACK_SIZE_DEFAULT)  {

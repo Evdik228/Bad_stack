@@ -19,15 +19,14 @@ int main(int argc, char const *argv[]) {
     for(int i = 10; i <= 170; i+=10) {
         Stack_push(&stack, i);
     }
-   
-    
 
-    Stack_pop(&stack);
-    
+    Dumper(&stack, "stack_1", "main");
 
-    Dumper(&stack, "stack", "main");
+     for(int i = 10; i <= 200; i+=10) {
+        Stack_pop(&stack);
+    }
  
-    Stack_dtor(&stack);    //error
+    Stack_dtor(&stack);    
 
     return 0;
 }

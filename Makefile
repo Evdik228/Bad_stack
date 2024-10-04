@@ -28,4 +28,4 @@ Compile: ./objects/main.o ./objects/utilits.o ./objects/stack_implementation.o
 	g++ -c src/stack_implementation.cpp -o ./objects/stack_implementation.o
 
 clean:    
-	rm ./object/*.o app
+	rm ./objects/*.o app
