@@ -11,7 +11,7 @@ int main(int argc, char const *argv[]) {
     FILE * Logfile = fopen("report.txt", "w");
     
     bad_stack stack = {};      
-    
+    //TODO: another pointer on stack!!
     Stack_ctor(&stack, "stack");
 
     //stack.logFile = Logfile;

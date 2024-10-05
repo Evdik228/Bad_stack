@@ -10,7 +10,6 @@ error_types Verification (bad_stack * stack) {
 
     if (stack == NULL ) {
         printf("error: The pointer to the stack structure is zero!\n");
-        stack->error_code = ZERO_POINTER_STRUCT;
         return ZERO_POINTER_STRUCT;
     }
 
