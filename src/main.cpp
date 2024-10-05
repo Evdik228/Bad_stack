@@ -20,9 +20,9 @@ int main(int argc, char const *argv[]) {
         Stack_push(&stack, i);
     }
 
-    Dumper(&stack, "stack_1", "main");
+    //Dumper(&stack, "stack_1", "main");
 
-     for(int i = 10; i <= 200; i+=10) {
+     for(int i = 10; i <= 180; i+=10) {
         Stack_pop(&stack);
     }
  

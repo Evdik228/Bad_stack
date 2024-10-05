@@ -11,7 +11,7 @@
 
 #define IS_ERROR(stack, name, function)     \
     if (Verification(stack) != OKEY) {      \
-        Dumper(stack, name, "Stack_ctor");  \
+        Dumper(stack, name, function);  \
         return stack->error_code;           \
     }  
 
@@ -26,7 +26,7 @@ error_types Stack_ctor(bad_stack * stack,  const char * stack_name) {
     if (stack == NULL) {
         return ZERO_POINTER_STRUCT;
     }
-    
+
     IS_ERROR(stack, stack->stack_name, "Stack_ctor");
 
     stack->stack_name = stack_name;    
@@ -78,7 +78,7 @@ error_types Stack_dtor(bad_stack * stack) {
 }
 
  error_types Stack_increase(bad_stack * stack) {
-    IS_ERROR(stack, stack->stack_name, "Stack_increase");
+    IS_ERROR(stack, stack->stack_name, "Stack_increase_1");
 
     stack->stack_data -= sizeof(CHICKSA_OK);
 
@@ -95,6 +95,8 @@ error_types Stack_dtor(bad_stack * stack) {
     stack->capacity *= 2;
     *((long long *)(stack->stack_data + stack->capacity * sizeof(stack_elem_t))) = CHICKSA_OK;
     
+    stack->hash_sum = Hash_count(stack);
+
     IS_ERROR(stack, stack->stack_name, "Stack_increase");
 
     return OKEY;
@@ -115,7 +117,7 @@ error_types Stack_push(bad_stack * stack, stack_elem_t elem_t) {
     stack->size += 1;
 
     if (stack->capacity <= stack->size) {    
-
+        stack->hash_sum = Hash_count(stack);
         if (Stack_increase(stack) == OKEY) {
             fprintf(stack->logFile,"Stack size increased to:%lu \n", stack->capacity);
         } else {
@@ -129,6 +131,8 @@ error_types Stack_push(bad_stack * stack, stack_elem_t elem_t) {
 
     fprintf(stack->logFile,"The element was successfully added to the stack!\n");
 
+    stack->hash_sum = Hash_count(stack);
+
     IS_ERROR(stack, stack->stack_name, "Stack_push");
 
     return OKEY;
@@ -136,7 +140,7 @@ error_types Stack_push(bad_stack * stack, stack_elem_t elem_t) {
 
 error_types Stack_decrease(bad_stack * stack) {
 
-    IS_ERROR(stack, stack->stack_name, "Stack_decrease");
+    IS_ERROR(stack, stack->stack_name, "Stack_decrease_1");
 
     stack->capacity /= 2;
 
@@ -152,6 +156,9 @@ error_types Stack_decrease(bad_stack * stack) {
     stack->stack_data += sizeof(CHICKSA_OK);
     *((long long *)(stack->stack_data + stack->capacity * sizeof(stack_elem_t))) = CHICKSA_OK;
     
+    stack->hash_sum = Hash_count(stack);
+
+    IS_ERROR(stack, stack->stack_name, "Stack_decrease");
 
     return OKEY;
 }
@@ -174,7 +181,7 @@ error_types Stack_pop(bad_stack * stack) {
     }
    
     if (stack->capacity > stack->size * 4 && stack->capacity > STACK_SIZE_DEFAULT)  {
-
+       
         if (Stack_decrease(stack) == OKEY) {
             fprintf(stack->logFile,"Stack size decreased to:%lu \n", stack->capacity);
 
@@ -193,6 +200,8 @@ error_types Stack_pop(bad_stack * stack) {
     stack->size--;
     fprintf (stack->logFile, "The element has left the stack!\n");
     
+    stack->hash_sum = Hash_count(stack);
+
     IS_ERROR(stack, stack->stack_name, "Stack_decrease");
 
     return OKEY;

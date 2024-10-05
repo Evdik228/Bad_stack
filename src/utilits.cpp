@@ -59,6 +59,12 @@ error_types Verification (bad_stack * stack) {
         stack->error_code = SMALL_CANARY_DIE;
         return SMALL_CANARY_DIE;    
     }
+    
+    if (stack->stack_data != NULL && stack->hash_sum != Hash_count(stack)) {
+        stack->error_code = HASH_ERR;
+        return HASH_ERR;
+    }
+
 
     return OKEY;
 }
@@ -77,7 +83,7 @@ void Dumper(bad_stack * stack, const char * stack_name, const char * function) {
 
     fprintf(stack->logFile, "   1. Capacity: %lu \n", stack->capacity);
     fprintf(stack->logFile, "   2. Size: %lu \n", stack->size);
-    fprintf(stack->logFile, "   3. Hash_sum: %lu \n", stack->hash_sum);
+    fprintf(stack->logFile, "   3. Hash_sum: %lu right: %lu \n", stack->hash_sum, Hash_count(stack));
 
     fprintf(stack->logFile, "   4. Last pop element: {");
     fprintf(stack->logFile, PRINTF_SPECIFIER, stack->last_pop_element);

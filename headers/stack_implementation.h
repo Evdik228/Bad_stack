@@ -34,7 +34,7 @@ struct bad_stack { // TODO: rename
     FILE *logFile;
     const char *stack_name;
     stack_elem_t last_pop_element;    //TODO: pop result
-    int hash_sum;
+    size_t hash_sum;
 
     long long mother_chicksa2;
 
