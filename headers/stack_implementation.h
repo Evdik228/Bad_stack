@@ -7,7 +7,7 @@ typedef int stack_elem_t;
 #define PRINTF_SPECIFIER "%d"
 
 const size_t STACK_SIZE_DEFAULT = 16;
-const long long CHICKSA_OK = 0XBADDED600DDED; // NOTE: nice!
+const long long CHICKSA_OK = 0XBADDED600DDED;  
 
 enum error_types {
     OKEY                = 0,

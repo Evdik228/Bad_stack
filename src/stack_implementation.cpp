@@ -17,17 +17,29 @@
 
 #else
 
-#define IS_ERROR(stack, name, function) ;
+    #define IS_ERROR(stack, name, function) ;
 
 #endif
-    
-error_types Stack_ctor(bad_stack * stack,  const char * stack_name) {
 
+#define LOG_MOD
+
+#ifdef LOG_MOD 
+
+    #define PRINTF_LOG(point, text) fprintf(point, text);
+#else 
+     #define PRINTF_LOG(point, text);
+#endif
+
+error_types Stack_ctor(bad_stack * stack,  const char * stack_name) {
     if (stack == NULL) {
         return ZERO_POINTER_STRUCT;
     }
 
     IS_ERROR(stack, stack->stack_name, "Stack_ctor");
+
+    if (stack->capacity != 0) {
+        return ERROR;
+    }
 
     stack->stack_name = stack_name;    
     stack->capacity = STACK_SIZE_DEFAULT;
@@ -108,7 +120,7 @@ error_types Stack_push(bad_stack * stack, stack_elem_t elem_t) {
         return ZERO_POINTER_STACK;
     } 
     
-    IS_ERROR(stack, stack->stack_name, "Stack_push");
+    
 
     if (stack->stack_data == NULL) {
         return ZERO_POINTER_STACK;
@@ -116,8 +128,10 @@ error_types Stack_push(bad_stack * stack, stack_elem_t elem_t) {
 
     stack->size += 1;
 
-    if (stack->capacity <= stack->size) {    
+    if (stack->capacity <= stack->size) {
+            
         stack->hash_sum = Hash_count(stack);
+
         if (Stack_increase(stack) == OKEY) {
             fprintf(stack->logFile,"Stack size increased to:%lu \n", stack->capacity);
         } else {
@@ -169,7 +183,7 @@ error_types Stack_pop(bad_stack * stack) {
         return ZERO_POINTER_STRUCT;
     }
 
-    if (stack->stack_data == NULL) {
+    if (stack->stack_data != NULL) {
         return ZERO_POINTER_STACK;
     } 
 
